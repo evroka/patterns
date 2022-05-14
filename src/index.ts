@@ -1,16 +1,12 @@
 import './app/MyComponent';
+import { messageFactory } from './store/messageFactory';
+import { MessageStore } from './store/messagesStore';
 import './style.scss';
 
-import { TextMessage } from './app/TextMessage';
-import { ImageMessage } from './app/ImageMessage';
-import { AudioMessage } from './app/AudioMessage';
 import { MessageContainer } from './app/MessageContainer';
 
-const textScreen = new TextMessage('', 'Test content', true);
+const rawMessages = new MessageStore().getMessages();
+const messages = rawMessages.map(message => messageFactory(message))
 
-const imageScreen = new ImageMessage('', 'assets/images/webpack.svg');
-
-const audioScreen = new AudioMessage('', 'https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
-
-const tree = new MessageContainer([textScreen, imageScreen, audioScreen], '')
+const tree = new MessageContainer(messages, '')
 document.getElementById('root')?.appendChild(tree.render());
