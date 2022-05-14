@@ -18,14 +18,9 @@ export class MessageContainer extends MyComponent {
 
     }
 
-    render(): HTMLElement {
+    renderSelf(): HTMLElement {
         const elem = document.createElement('div');
-
         elem.style.cssText = this.baseStyle + this.style;
-
-        this.children.forEach(child => {
-            elem.appendChild(child.render())
-        });
 
         return elem;
     }

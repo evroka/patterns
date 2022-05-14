@@ -3,7 +3,7 @@ import { Message } from "./Message";
 export class ImageMessage extends Message {
     private imageMessageStyle = 'background-color: yellow;'
 
-    render(): HTMLElement {
+    renderSelf(): HTMLElement {
         const elem = document.createElement('div');
         const newImg = document.createElement('img');
 
@@ -14,10 +14,6 @@ export class ImageMessage extends Message {
         elem.appendChild(newImg);
 
         elem.style.cssText = this.messsageStyle + this.imageMessageStyle + this.style;
-
-        this.children.forEach(child => {
-            elem.appendChild(child.render())
-        });
 
         return elem;
     }

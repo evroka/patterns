@@ -3,7 +3,7 @@ import { Message } from "./Message";
 export class AudioMessage extends Message {
     private audioMessageStyle = 'background-color: red;'
 
-    render(): HTMLElement {
+    renderSelf(): HTMLElement {
         const elem = document.createElement('div');
         const newAudio = document.createElement('audio');
 
@@ -14,10 +14,6 @@ export class AudioMessage extends Message {
         elem.appendChild(newAudio);
 
         elem.style.cssText = this.messsageStyle + this.audioMessageStyle + this.style;
-
-        this.children.forEach(child => {
-            elem.appendChild(child.render())
-        });
 
         return elem;
     }
