@@ -1,12 +1,22 @@
 import './app/MyComponent';
 import { messageFactory } from './store/messageFactory';
-import { MessageStore } from './store/messagesStore';
+import { IMessageApi, MessageApi, messageApiFactory } from './store/messagesApi';
 import './style.scss';
 
 import { MessageContainer } from './app/MessageContainer';
+import { API_TYPE } from './config';
 
-const rawMessages = new MessageStore().getMessages();
-const messages = rawMessages.map(message => messageFactory(message))
+const messageApi: IMessageApi = messageApiFactory(API_TYPE)
+const tree = new MessageContainer([], '', messageApi, messageFactory)
+let result = tree.render()
+document.getElementById('root')?.appendChild(result);
 
-const tree = new MessageContainer(messages, '')
-document.getElementById('root')?.appendChild(tree.render());
+//////////// reload
+const btn = document.createElement('button')
+btn.onclick = function() {
+    const newNode = tree.render();
+    document.getElementById('root')?.replaceChild(newNode, result);
+    result = newNode
+};
+btn.textContent = 'RELOAD';
+document.getElementById('root')?.appendChild(btn);
