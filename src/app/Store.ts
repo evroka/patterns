@@ -1,11 +1,14 @@
 import { IMessage } from "../store/messageFactory";
 import { CachedMessageApi } from '../store/messagesApi';
-import { reRender } from '../index';
 
 export class Store {
     private static instance: Store | undefined;
     public messages: IMessage[] = []; // null-object pattern
     private _onChange: Function = () => {}; // null-object pattern
+
+    set onChange(value: Function) {
+        this._onChange = value;
+    }
 
     private constructor() {
         this.load();
@@ -22,6 +25,6 @@ export class Store {
         const api = new CachedMessageApi();
         this.messages = await api.getMessages();
 
-        reRender();
+        this._onChange();
     }
 }
