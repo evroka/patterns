@@ -4,7 +4,8 @@ import { reRender } from '../index';
 
 export class Store {
     private static instance: Store | undefined;
-    public messages: IMessage[] = []; 
+    public messages: IMessage[] = []; // null-object pattern
+    private _onChange: Function = () => {}; // null-object pattern
 
     private constructor() {
         this.load();
