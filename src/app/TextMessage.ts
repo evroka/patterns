@@ -1,7 +1,7 @@
 import { Message } from "./Message";
 
 export class TextMessage extends Message {
-    private textMessageStyle = 'background-color: green;'
+    private textMessageStyle = 'background-color: lime;'
 
     renderSelf(): HTMLElement {
         const elem = document.createElement('div');

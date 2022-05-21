@@ -6,8 +6,8 @@ import { IMessageApi } from "../store/messagesApi";
 
 export class MessageContainer extends MyComponent {
     private baseStyle = `
-        width:280px;
-        height:340px;
+        width:350px;
+        height:500px;
         border:1px solid grey; 
         border-radius:8px; 
         background-image: url("https://i.pinimg.com/originals/51/ed/c0/51edc046eb80046ee4755ee71d0f19ca.jpg"); 
