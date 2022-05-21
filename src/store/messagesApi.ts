@@ -2,7 +2,7 @@ import { CACHED_API, CACHED_API_2 } from "../constants"
 import { IMessage } from "./messageFactory"
 
 export interface IMessageApi {
-    getMessages: () => IMessage[]
+    getMessages: () => Promise<IMessage[]>
 }
 
 export class MessageApi implements IMessageApi {
@@ -11,8 +11,8 @@ export class MessageApi implements IMessageApi {
         while (Date.now() < end) continue
     }
    
-    public getMessages(): IMessage[] {
-        this.syncWait(3000)
+    public async getMessages(): Promise<IMessage[]>  {
+        await new Promise(r => setTimeout(r, 3000));
 
         return [
             {"id": "1", "type": "text", "content": "test text" + Date.now(), "isMine": true },
@@ -26,9 +26,9 @@ export class CachedMessageApi implements IMessageApi {
     private cache: IMessage[] | undefined;
     private messageApi = new MessageApi();
 
-    public getMessages(): IMessage[] {
+    public async getMessages(): Promise<IMessage[]> {
         if (!this.cache) {
-            this.cache = this.messageApi.getMessages();
+            this.cache = await this.messageApi.getMessages();
         } 
         return this.cache;
     }
@@ -37,9 +37,9 @@ export class CachedMessageApi implements IMessageApi {
 export class CachedMessageApiTwo extends MessageApi {
     private cache: IMessage[] | undefined;
 
-    public getMessages(): IMessage[] {
+    public async getMessages(): Promise<IMessage[]> {
         if (!this.cache) {
-            this.cache = super.getMessages();
+            this.cache = await super.getMessages();
         } 
         return this.cache;
     }

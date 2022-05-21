@@ -11,12 +11,14 @@ const tree = new MessageContainer([], '', messageApi, messageFactory)
 let result = tree.render()
 document.getElementById('root')?.appendChild(result);
 
-//////////// reload
-const btn = document.createElement('button')
-btn.onclick = function() {
+export const reRender = function() {
     const newNode = tree.render();
     document.getElementById('root')?.replaceChild(newNode, result);
     result = newNode
 };
+
+//////////// reload
+const btn = document.createElement('button');
+btn.onclick = reRender; 
 btn.textContent = 'RELOAD';
 document.getElementById('root')?.appendChild(btn);

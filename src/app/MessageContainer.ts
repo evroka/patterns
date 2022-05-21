@@ -1,8 +1,8 @@
 import { IMessage } from "../store/messageFactory";
-import { MessageApi } from "../store/messagesApi";
 import { Message } from "./Message";
 import { MyComponent } from "./MyComponent";
 import { IMessageApi } from "../store/messagesApi";
+import { Store } from "./Store";
 
 export class MessageContainer extends MyComponent {
     private baseStyle = `
@@ -19,6 +19,7 @@ export class MessageContainer extends MyComponent {
 
     private messageApi: IMessageApi;
     private messageFactory: (message: IMessage) => Message;
+    private store: Store = Store.getInstance();
 
     constructor(messages: Message[], style: string, messageApi: IMessageApi, messageFactory: (message: IMessage) => Message) {
         super(messages, style, '')
@@ -30,7 +31,7 @@ export class MessageContainer extends MyComponent {
         const elem = document.createElement('div');
         elem.style.cssText = this.baseStyle + this.style;
         
-        const rawMessages = this.messageApi.getMessages();
+        const rawMessages = this.store.messages;
         this.children = rawMessages.map(message => this.messageFactory(message))
 
         return elem;
