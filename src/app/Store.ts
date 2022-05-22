@@ -23,7 +23,17 @@ export class Store {
 
     public async load(): Promise<void> {
         const api = new CachedMessageApi();
-        this.messages = await api.getMessages();
+        const rawMessages = await api.getMessages();
+        const self = this;
+        this.messages = new Proxy(rawMessages, {
+            set: function(target, property, value: IMessage, receiver) {
+                // @ts-ignore: Unreachable code error
+                target[property] = value;
+                self._onChange();
+
+                return true;
+              }
+        })
 
         this._onChange();
     }
