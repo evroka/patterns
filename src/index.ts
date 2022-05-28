@@ -9,10 +9,9 @@ import { Container } from './app/Container';
 import { MessageInput } from './app/MessageInput';
 import { Store } from './app/Store';
 
-const messageApi: IMessageApi = messageApiFactory(API_TYPE)
-const messageContainer = new MessageContainer([], '', messageApi, messageFactory)
-const messageInput = new MessageInput();
-const container = new Container([messageContainer, messageInput])
+
+const container = new Container()
+
 
 const store = Store.getInstance();
 store.onChange = reRender;

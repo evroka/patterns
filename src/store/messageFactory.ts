@@ -10,14 +10,14 @@ export interface IMessage {
     isMine: boolean;
   }
 
-export const messageFactory = (message: IMessage): Message =>  {
+export const messageFactory = (message: IMessage, onQuote: (value: string) => void): Message =>  {
     const { type, content, isMine } = message
 
     switch(type) {
-      case 'text': return new TextMessage('', content, isMine);
-      case 'image': return new ImageMessage('', content, isMine);
-      case 'audio': return new AudioMessage('', content, isMine);
+      case 'text': return new TextMessage('', content, isMine, onQuote);
+      case 'image': return new ImageMessage('', content, isMine, onQuote);
+      case 'audio': return new AudioMessage('', content, isMine, onQuote);
   
-      default: return new TextMessage('', content, isMine);
+      default: return new TextMessage('', content, isMine, onQuote);
     }
   } 

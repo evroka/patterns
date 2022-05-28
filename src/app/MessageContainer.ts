@@ -18,13 +18,21 @@ export class MessageContainer extends MyComponent {
     `; 
 
     private messageApi: IMessageApi;
-    private messageFactory: (message: IMessage) => Message;
+    private messageFactory: (message: IMessage, onQuote: (value: string) => void) => Message;
     private store: Store = Store.getInstance();
+    private onQuote: (value: string) => void = () => {};
 
-    constructor(messages: Message[], style: string, messageApi: IMessageApi, messageFactory: (message: IMessage) => Message) {
+    constructor(
+            messages: Message[], 
+            style: string, 
+            messageApi: IMessageApi, 
+            messageFactory: (message: IMessage, onQuote: (value: string) => void) => Message,
+            onQuote: (value: string) => void = () => {},
+        ) {
         super(messages, style, '')
         this.messageApi = messageApi;
-        this.messageFactory = messageFactory
+        this.messageFactory = messageFactory;
+        this.onQuote = onQuote;
     }
 
     renderSelf(): HTMLElement {
@@ -32,7 +40,7 @@ export class MessageContainer extends MyComponent {
         elem.style.cssText = this.baseStyle + this.style;
         
         const rawMessages = this.store.messages;
-        this.children = rawMessages.map(message => this.messageFactory(message))
+        this.children = rawMessages.map(message => this.messageFactory(message, this.onQuote))
 
         return elem;
     }
