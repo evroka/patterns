@@ -5,6 +5,11 @@ export class Store {
     private static instance: Store | undefined;
     public messages: IMessage[] = []; // null-object pattern
     private _onChange: Function = () => {}; // null-object pattern
+    public savedMessages: IMessage[] = [];
+    private api: CachedMessageApi = new CachedMessageApi();
+    public isChat = this.observe({
+        value: true,
+    });
 
     set onChange(value: Function) {
         this._onChange = value;
@@ -12,6 +17,7 @@ export class Store {
 
     private constructor() {
         this.load();
+        this.loadSavedMessages();
     }
 
     public static getInstance(): Store {
@@ -21,11 +27,10 @@ export class Store {
         return this.instance;
     }
 
-    public async load(): Promise<void> {
-        const api = new CachedMessageApi();
-        const rawMessages = await api.getMessages();
+    public observe <T extends Object> (targetValue: T): T {
         const self = this;
-        this.messages = new Proxy(rawMessages, {
+
+        return new Proxy(targetValue, {
             set: function(target, property, value: IMessage, receiver) {
                 // @ts-ignore: Unreachable code error
                 target[property] = value;
@@ -34,6 +39,18 @@ export class Store {
                 return true;
               }
         })
+    }
+
+    public async load(): Promise<void> {
+        const rawMessages = await this.api.getMessages();
+        this.messages = this.observe(rawMessages);
+
+        this._onChange();
+    }
+
+    public async loadSavedMessages(): Promise<void> {
+        const rawMessages = await this.api.getSavedMessages();
+        this.savedMessages = this.observe(rawMessages);
 
         this._onChange();
     }

@@ -15,6 +15,7 @@ export class MessageContainer extends MyComponent {
         display: flex;
         flex-direction: column;
         justify-content: end;
+        position: relative;
     `; 
 
     private messageApi: IMessageApi;
@@ -38,8 +39,34 @@ export class MessageContainer extends MyComponent {
     renderSelf(): HTMLElement {
         const elem = document.createElement('div');
         elem.style.cssText = this.baseStyle + this.style;
+
+        const header = document.createElement('div');
+        const headerTitle = document.createElement('span');
+
+        header.style.cssText = `
+            position: absolute;
+            top:0;
+            background-color: darkslategrey;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+        `
+
+        headerTitle.style.cssText = 'color: white; font-weight: 800;'
+
+        headerTitle.textContent = this.store.isChat.value ? 'Chat' : 'Saved Messages';
+        const self = this
+        header.onclick = function() {
+            self.store.isChat.value = !self.store.isChat.value;
+        }
+
+        header.appendChild(headerTitle);
+        elem.appendChild(header);
         
-        const rawMessages = this.store.messages;
+        const rawMessages = self.store.isChat.value ? this.store.messages : this.store.savedMessages;
         this.children = rawMessages.map(message => this.messageFactory(message, this.onQuote))
 
         return elem;
