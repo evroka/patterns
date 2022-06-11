@@ -14,7 +14,6 @@ export class AudioMessage extends Message {
         elem.appendChild(newAudio);
 
         elem.style.cssText = this.messsageStyle + this.audioMessageStyle + this.style;
-
-        return elem;
+        return elem; 
     }
 }
