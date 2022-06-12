@@ -19,7 +19,12 @@ export class MessageContainer extends MyComponent {
     `; 
 
     private messageApi: IMessageApi;
-    private messageFactory: (message: IMessage, onQuote: (value: string) => void) => Message;
+    private messageFactory: (
+        message: IMessage,
+        onQuote: (value: string) => void,
+        onSave: (message: IMessage) => void,
+        onDelete: (message: IMessage) => void,
+        ) => Message;
     private store: Store = Store.getInstance();
     private onQuote: (value: string) => void = () => {};
 
@@ -27,7 +32,12 @@ export class MessageContainer extends MyComponent {
             messages: Message[], 
             style: string, 
             messageApi: IMessageApi, 
-            messageFactory: (message: IMessage, onQuote: (value: string) => void) => Message,
+            messageFactory: (
+                message: IMessage, 
+                onQuote: (value: string) => void, 
+                onSave: (message: IMessage) => void, 
+                onDelete: (message: IMessage) => void
+                ) => Message,
             onQuote: (value: string) => void = () => {},
         ) {
         super(messages, style, '')
@@ -67,8 +77,18 @@ export class MessageContainer extends MyComponent {
         elem.appendChild(header);
         
         const rawMessages = self.store.isChat.value ? this.store.messages : this.store.savedMessages;
-        this.children = rawMessages.map(message => this.messageFactory(message, this.onQuote))
+        this.children = rawMessages
+            .filter(({ isDeleted }) => !isDeleted)
+            .map(message => this.messageFactory(message, this.onQuote, this.onSave.bind(this), this.onDelete.bind(this)))
 
         return elem;
+    }
+
+    public onSave(message: IMessage): void {
+        this.store.savedMessages.push(this.store.observe({...message}));
+    }
+
+    public onDelete(message: IMessage): void {
+        message.isDeleted = true;
     }
 }

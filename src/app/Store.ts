@@ -42,14 +42,16 @@ export class Store {
     }
 
     public async load(): Promise<void> {
-        const rawMessages = await this.api.getMessages();
+        let rawMessages = await this.api.getMessages();
+        rawMessages = rawMessages.map(message => this.observe(message));
         this.messages = this.observe(rawMessages);
 
         this._onChange();
     }
 
     public async loadSavedMessages(): Promise<void> {
-        const rawMessages = await this.api.getSavedMessages();
+        let rawMessages = await this.api.getSavedMessages();
+        rawMessages = rawMessages.map(message => this.observe(message));
         this.savedMessages = this.observe(rawMessages);
 
         this._onChange();

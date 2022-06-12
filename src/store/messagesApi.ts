@@ -15,9 +15,9 @@ export class MessageApi implements IMessageApi {
         await new Promise(r => setTimeout(r, 3000));
 
         return [
-            {"id": "1", "type": "text", "content": "test text" + Date.now(), "isMine": true },
-            {"id": "2", "type": "image", "content": "https://via.placeholder.com/100x80/ff006f/ffffff", "isMine": false },
-            {"id": "3", "type": "audio", "content": "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3", "isMine": false },
+            {"id": "1", "type": "text", "content": "test text" + Date.now(), "isMine": true, "isDeleted": false },
+            {"id": "2", "type": "image", "content": "https://via.placeholder.com/100x80/ff006f/ffffff", "isMine": false, "isDeleted": false },
+            {"id": "3", "type": "audio", "content": "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3", "isMine": false, "isDeleted": false },
         ]
     }
 

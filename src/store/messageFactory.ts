@@ -8,16 +8,23 @@ export interface IMessage {
     type: string;
     content: string;
     isMine: boolean;
+    isDeleted: boolean;
   }
 
-export const messageFactory = (message: IMessage, onQuote: (value: string) => void): Message =>  {
+
+export const messageFactory = (
+  message: IMessage, 
+  onQuote: (value: string) => void, 
+  onSave: (message: IMessage) => void,
+  onDelete: (message: IMessage) => void,
+  ): Message =>  {
     const { type, content, isMine } = message
 
     switch(type) {
-      case 'text': return new TextMessage('', content, isMine, onQuote);
-      case 'image': return new ImageMessage('', content, isMine, onQuote);
-      case 'audio': return new AudioMessage('', content, isMine, onQuote);
+      case 'text': return new TextMessage('', content, isMine, onQuote, onSave, onDelete, message);
+      case 'image': return new ImageMessage('', content, isMine,  onQuote, onSave, onDelete, message);
+      case 'audio': return new AudioMessage('', content, isMine, onQuote, onSave, onDelete, message);
   
-      default: return new TextMessage('', content, isMine, onQuote);
+      default: return new TextMessage('', content, isMine, onQuote, onSave, onDelete, message);
     }
   } 

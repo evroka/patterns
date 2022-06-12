@@ -27,6 +27,7 @@ export class MessageInput extends MyComponent {
                  type: "text", 
                  content: self.input.value, 
                  isMine: true,
+                 isDeleted: false,
             });
          }
 
